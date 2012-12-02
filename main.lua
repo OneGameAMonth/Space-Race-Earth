@@ -18,6 +18,11 @@ function love.update(dt)
   if game.stopped then
     return -- when we land and stop the game we can leave this function right away
   end
+  -- Minimum interaction is if you hit space to boost your speed, we use dt to make it smooth
+  if love.keyboard.isDown(' ') then
+    game.speed_vertical = game.speed_vertical - dt
+  end
+
   -- things have a maximum speed, and as log as we haven't reached that we can
   -- use gravity and dt to fall faster.
   if game.speed_vertical < game.max_speed_vertical then
@@ -40,5 +45,8 @@ function love.draw()
   love.graphics.print('Speed vertical: ' .. game.speed_vertical .. 'm/s', 10, 30)
   if game.height <= 0 then
     love.graphics.print('You landed. Or crashed', 10, 50)
+  else
+    -- Tell player what to do
+    love.graphics.print('Hit SPACE to boost up', 10, 100)
   end
 end
