@@ -27,11 +27,11 @@ end
 
 -- update is run again and again, the variable dt tells you how much time elapsed since the last time
 function love.update(dt)
+  game.boosting = false -- always set false but if the key is set it will be set to true
   if game.stopped then
     return -- when we land and stop the game we can leave this function right away
   end
 
-  game.boosting = false -- always set false but if the key is set it will be set to true
   -- Minimum interaction is if you hit space to boost your speed, we use dt to make it smooth
   if love.keyboard.isDown(' ') then
     game.speed_vertical = game.speed_vertical - dt
@@ -82,8 +82,8 @@ function love.draw()
     spaceship = game.spaceship_with_booster
   end
   love.graphics.draw(spaceship,
-    love.graphics.getWidth() / 2 - 5, -- center it in the middle, it will be 10 pixels wide
-    view_height - 20 - (view_height * game.height / game.startHeight))
+    love.graphics.getWidth() / 2 - 16, -- center it in the middle, subtract half the image's width
+    view_height - 32 - (view_height * game.height / game.startHeight)) -- 32 is image height
   -- let's draw the moon surface
 
   love.graphics.rectangle('fill',
