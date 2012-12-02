@@ -15,7 +15,8 @@ game_defaults = {
   gravity = 0.2,
   save_landing_speed = 0.2, -- for our win/lose condition we define a maximum speed that is save for landing
   spaceship = nil,
-  spaceship_with_booster = nil
+  spaceship_with_booster = nil,
+  time_elapsed = 0
 }
 
 function love.load()
@@ -37,6 +38,9 @@ function love.update(dt)
     end
     return -- when we land and stop the game we can leave this function right away
   end
+
+  -- keep track of time
+  game.time_elapsed = game.time_elapsed + dt
 
   -- Minimum interaction is if you hit space to boost your speed, we use dt to make it smooth
   if love.keyboard.isDown(' ') then
@@ -86,7 +90,7 @@ function love.draw()
       love.graphics.print('Oh noes, you crashed!', 10, 50)
     else
       love.graphics.setColor(50,255,50,255) -- green
-      love.graphics.print('You landed sucessfully', 10, 50)
+      love.graphics.print('You landed sucessfully in ' .. shortdec(game.time_elapsed) .. ' seconds', 10, 50)
     end
     love.graphics.setColor(255,255,255,255) -- reset color to white
     love.graphics.print('Press [r] to restart', 10, 100)
