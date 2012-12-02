@@ -46,8 +46,8 @@ end
 function love.draw()
   love.graphics.setFont(love.graphics.newFont(14))
   love.graphics.setColor(255,255,255,255)
-  love.graphics.print('Height: ' .. game.height .. 'm', 10, 10)
-  love.graphics.print('Speed vertical: ' .. game.speed_vertical .. 'm/s', 10, 30)
+  love.graphics.print('Height: ' .. shortdec(game.height) .. 'm', 10, 10)
+  love.graphics.print('Speed vertical: ' .. shortdec(game.speed_vertical,2) .. 'm/s', 10, 30)
   if game.height <= 0 then
     if game.crashed then
       love.graphics.print('Oh noes, you crashed!', 10, 50)
@@ -58,4 +58,14 @@ function love.draw()
     -- Tell player what to do
     love.graphics.print('Hit SPACE to boost up', 10, 100)
   end
+end
+
+-- so far we had miliseconds printed out, this function will help us to print nicer numbers
+function shortdec(v, i)
+  if not i then
+    i = 1
+  end
+  i = 10 ^ i
+  -- multiply with 10, round and divide by 10
+  return math.floor(v * i) / i
 end
