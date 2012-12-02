@@ -8,6 +8,7 @@ game = {
   speed_vertical = 0,
   max_speed_vertical = 2,
   gravity = 0.2,
+  save_landing_speed = 0.2 -- for our win/lose condition we define a maximum speed that is save for landing
 }
 
 function love.load()
@@ -33,8 +34,12 @@ function love.update(dt)
   game.height = game.height - game.speed_vertical
 
   if game.height <= 0 then
-    game.stopped = true -- stop!
-    game.height = 0 -- set to zero because we are tidy
+    -- compare the last speed with the speed we consider save for landing
+    if game.speed_vertical > game.save_landing_speed then
+      game.crashed = true
+    end
+    game.height = 0
+    game.stopped = true
   end
 end
 
@@ -44,7 +49,11 @@ function love.draw()
   love.graphics.print('Height: ' .. game.height .. 'm', 10, 10)
   love.graphics.print('Speed vertical: ' .. game.speed_vertical .. 'm/s', 10, 30)
   if game.height <= 0 then
-    love.graphics.print('You landed. Or crashed', 10, 50)
+    if game.crashed then
+      love.graphics.print('Oh noes, you crashed!', 10, 50)
+    else
+      love.graphics.print('You landed sucessfully', 10, 50)
+    end
   else
     -- Tell player what to do
     love.graphics.print('Hit SPACE to boost up', 10, 100)
