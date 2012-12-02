@@ -5,7 +5,7 @@
 
 
 -- Here we keep any data from the game like height, speed, gravity
-game = {
+game_defaults = {
   stopped = false,
   startHeight = 200, -- same as hight but won't be changed by the game
   height = 200,
@@ -19,6 +19,9 @@ game = {
 }
 
 function love.load()
+  game = {} -- let's copy the defaults, lame excuse to use a for-loop ;-)
+  for k, v in pairs(game_defaults) do game[k] = v end
+
   game.spaceship = love.graphics.newImage('spaceship.png')
   -- http://pixieengine.com/sprites/34690-spaceship-with-booster
   game.spaceship_with_booster = love.graphics.newImage('spaceship_with_booster.png')
@@ -29,6 +32,9 @@ end
 function love.update(dt)
   game.boosting = false -- always set false but if the key is set it will be set to true
   if game.stopped then
+    if love.keyboard.isDown('r') then
+      love.load()
+    end
     return -- when we land and stop the game we can leave this function right away
   end
 
@@ -82,6 +88,8 @@ function love.draw()
       love.graphics.setColor(50,255,50,255) -- green
       love.graphics.print('You landed sucessfully', 10, 50)
     end
+    love.graphics.setColor(255,255,255,255) -- reset color to white
+    love.graphics.print('Press [r] to restart', 10, 100)
   else
   love.graphics.setColor(255,255,255,255) -- reset color to white
     -- Tell player what to do
