@@ -22,4 +22,7 @@ function love.draw()
   state:draw()
 end
 
+function love.keypressed(key)
+  state:keypressed(key)
+end
 
