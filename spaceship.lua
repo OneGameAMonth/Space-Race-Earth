@@ -100,3 +100,13 @@ function Spaceship:draw()
 
   love.graphics.pop()
 end
+
+-- so far we had miliseconds printed out, this function will help us to print nicer numbers
+function shortdec(v, i)
+  if not i then
+    i = 1
+  end
+  i = 10 ^ i
+  -- multiply with 10, round and divide by 10
+  return math.floor(v * i) / i
+end
