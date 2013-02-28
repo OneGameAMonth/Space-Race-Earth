@@ -30,12 +30,12 @@ function love.draw()
   end
   
   -- let's draw the moon surface
-
+  love.graphics.setColor(80,205,105,255)
   love.graphics.rectangle('fill',
     2, -- starting at the left border
-    love.graphics.getHeight() * 0.9, -- 90% from the op
+    love.graphics.getHeight() - 40, -- 90% from the op
     love.graphics.getWidth()-4, -- full width, with a little border
-    love.graphics.getHeight() * 0.1 - 2 ) -- 10% high, with a little border at the bottom
+    40 ) -- 10% high, with a little border at the bottom
 end
 
 -- so far we had miliseconds printed out, this function will help us to print nicer numbers

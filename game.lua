@@ -18,12 +18,11 @@ function Game:initialize()
   local y = love.graphics.getHeight()
   local middle = love.graphics.getWidth() / 2
   self.players = {
-    Spaceship('d', love.graphics.newImage('spaceship1.png'), {x = middle - 40, y = y}, {x = middle - 100, y = 40}),
-    Spaceship('l', love.graphics.newImage('spaceship2.png'), {x = middle + 40, y = y}, {x = middle + 100, y = 40})
+    Spaceship('d', love.graphics.newImage('spaceship1.png'),
+        {x = middle - 40, y = y}, {x = middle - 250, y = 40}), -- guesstimate text width to 150
+    Spaceship('l', love.graphics.newImage('spaceship2.png'),
+        {x = middle + 40, y = y}, {x = middle + 100, y = 40})
   }
-  for i, player in ipairs(self.players) do
-    player.start_height = player.start_height - 40
-  end
 end
 
 function Game:update(dt)

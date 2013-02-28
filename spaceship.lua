@@ -12,7 +12,8 @@ function Spaceship:initialize(button, image, position, hud_position)
   self.button = button
   self.boosting = false
   self.image = image
-  self.start_height = love.graphics.getHeight()
+
+  self.ground_y = 40 + 32 -- ground + sprite height
 end
 
 function Spaceship:update(dt)
@@ -38,24 +39,25 @@ function Spaceship:update(dt)
 
   self.position.y = self.position.y - self.speed.y
 
-  if self.position.y <= 0 then
+  if self.position.y <= self.ground_y then
     -- compare the last speed with the speed we consider save for landing
     if self.speed.y > self.save_landing_speed then
       self.crashed = true
     end
-    self.position.y = 0
+    self.position.y = self.ground_y
     game.stopped = true
   end
 end
 
 function Spaceship:draw()
+  love.graphics.setColor(255,255,255,255)
   -- let's draw the space ship
   local spaceship = self.image
   if self.boosting then
     spaceship = self.image -- game.spaceship_with_booster
   end
   love.graphics.push()
-  love.graphics.translate(self.position.x, self.start_height - self.position.y)
+  love.graphics.translate(self.position.x, love.graphics.getHeight() - self.position.y)
   love.graphics.draw(spaceship, 1, 1)
   love.graphics.pop()
 
@@ -66,7 +68,7 @@ function Spaceship:draw()
   if self.position.y * self.speed.y > 2 * self.position.y * self.save_landing_speed then
     love.graphics.setColor(255,0,0,255)
   end
-  love.graphics.print('Height: ' .. shortdec(self.position.y) .. 'm', 10, 10)
+  love.graphics.print('Height: ' .. shortdec(self.position.y - self.ground_y) .. 'm', 10, 10)
 
   -- make it red any time we are too fast
   if self.speed.y > self.save_landing_speed then
@@ -79,7 +81,7 @@ function Spaceship:draw()
   love.graphics.setFont(love.graphics.newFont(14))
   love.graphics.setColor(255,255,255,255)
 
-  if self.position.y <= 0 then
+  if self.position.y <= self.ground_y then
     if self.crashed then
       love.graphics.setColor(255,50,50,255) -- red for losers
       love.graphics.print('Oh noes, you crashed!', 10, 50)
@@ -92,7 +94,7 @@ function Spaceship:draw()
   else
   love.graphics.setColor(255,255,255,255) -- reset color to white
     -- Tell player what to do
-    love.graphics.print('Hit SPACE to boost up', 10, 100)
+    love.graphics.print('Hit [' .. self.button .. '] to boost up', 10, 100)
   end
   love.graphics.setColor(200,200,200,255)
 
