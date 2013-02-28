@@ -3,14 +3,15 @@
 # https://github.com/TomK32/kollum/blob/master/build.sh
 # based on https://github.com/josefnpat/LD24/blob/master/build.sh
 # Configure this, and also ensure you have the build/osx.patch ready.
-NAME="Rogue Beach, CA"
+NAME="Space Race Earth"
 
 # Version is {last tag}-{commits since last tag}.
 # e.g: 0.1.2-3
 GAME_VERSION=`git tag|tail -1`
 REVISION=`git log ${GAME_VERSION}..HEAD --oneline | wc -l | sed -e 's/ //g'`
+GAME_VERSION=${GAME_VERSION}.${REVISION}
 
-FILENAME="$NAME-$GAME_VERSION-$REVISION"
+FILENAME="$NAME-$GAME_VERSION"
 VERSION=0.8.0
 BUILD="`pwd`/build"
 mkdir -p "${BUILD}"
@@ -27,7 +28,7 @@ done
 # Take HEAD make an archive of it
 git archive HEAD -o "$BUILD/$FILENAME.zip"
 
-echo "game = {}; game.version = '${GAME_VERSION}-${REVISION}'" > "version.lua"
+echo "game = {}; game.version = '${GAME_VERSION}'" > "version.lua"
 # Add the version file
 zip -q "$BUILD/$FILENAME.zip" "version.lua"
 mv "$BUILD/$FILENAME.zip" "$BUILD/$FILENAME.love"
@@ -63,7 +64,7 @@ unzip -q -d "$BUILD" "$BUILD/love-$VERSION-macosx-ub.zip"
 mv "$BUILD/love.app" "$BUILD/${FILENAME}.app"
 cp "$BUILD/$FILENAME.love" "$BUILD/$FILENAME.app/Contents/Resources/"
 patch "$BUILD/${FILENAME}.app/Contents/Info.plist" -i "$BUILD/osx.patch"
-cp "images/Rogue Beach.icns" "$BUILD/$FILENAME.app/Contents/Resources"
+cp "build/Space Race Earth.icns" "$BUILD/$FILENAME.app/Contents/Resources"
 R_PWD=`pwd`
 cd "$BUILD"
 if [ -f "${FILENAME}_macosx.zip" ]; then rm "${FILENAME}_macosx.zip"; fi
