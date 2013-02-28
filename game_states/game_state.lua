@@ -4,21 +4,19 @@ require('game')
 
 GameState = class("GameState", State)
 function GameState:initialize()
+  self.background_image = love.graphics.newImage('images/earth800.png')
+  self.twit = 0
 end
 
 function GameState:draw()
+  self.twit = math.max(-20, math.min(20, self.twit + (1 - math.random() * 2)))
+  love.graphics.setColor(180 - self.twit ,205 + 2 * self.twit, 105 + self.twit, 255)
+  love.graphics.draw(self.background_image)
+
   for i, player in ipairs(game.players) do
     player:draw(dt)
   end
-  
-  -- let's draw the moon surface
-  love.graphics.setColor(80,205,105,255)
-  love.graphics.rectangle('fill',
-    2, -- starting at the left border
-    love.graphics.getHeight() - 40, -- 90% from the op
-    love.graphics.getWidth()-4, -- full width, with a little border
-    40 ) -- 10% high, with a little border at the bottom
-
+ 
   love.graphics.print("FPS: "..love.timer.getFPS(), 10, 20)
 end
 
