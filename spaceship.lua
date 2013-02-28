@@ -3,7 +3,7 @@ Spaceship = class("Spaceship")
 function Spaceship:initialize(button, image, position, hud_position)
   self.max_speed = 2.0
   self.speed = { x = 0, y = 0 }
-  self.save_landing_speed = 0.2
+  self.save_landing_speed = 0.5
   self.velocity = 0
   self.position = position
   self.hud_position = hud_position
@@ -37,7 +37,7 @@ function Spaceship:update(dt)
     self.speed.y = self.speed.y + dt * game.gravity
   end
 
-  self.position.y = self.position.y - self.speed.y
+  self.position.y = self.position.y - self.speed.y / 2
 
   if self.position.y <= self.ground_y then
     -- compare the last speed with the speed we consider save for landing
