@@ -25,41 +25,6 @@ function love.update(dt)
 end
 
 function love.draw()
-  love.graphics.setFont(love.graphics.newFont(14))
-  love.graphics.setColor(255,255,255,255)
-
-  -- make it red if we are getting too close too fast
-  if game.height * game.speed_vertical > 2 * game.height * game.save_landing_speed then
-    love.graphics.setColor(255,0,0,255)
-  end
-  love.graphics.print('Height: ' .. shortdec(game.height) .. 'm', 10, 10)
-
-  -- make it red any time we are too fast
-  if game.speed_vertical > game.save_landing_speed then
-    love.graphics.setColor(255,0,0,255)
-  else
-    love.graphics.setColor(255,255,255,255)
-  end
-  love.graphics.print('Speed vertical: ' .. shortdec(game.speed_vertical,2) .. 'm/s', 10, 30)
-  if game.height <= 0 then
-    if game.crashed then
-      love.graphics.setColor(255,50,50,255) -- red for losers
-      love.graphics.print('Oh noes, you crashed!', 10, 50)
-    else
-      love.graphics.setColor(50,255,50,255) -- green
-      love.graphics.print('You landed sucessfully in ' .. shortdec(game.time_elapsed) .. ' seconds', 10, 50)
-    end
-    love.graphics.setColor(255,255,255,255) -- reset color to white
-    love.graphics.print('Press [r] to restart', 10, 100)
-  else
-  love.graphics.setColor(255,255,255,255) -- reset color to white
-    -- Tell player what to do
-    love.graphics.print('Hit SPACE to boost up', 10, 100)
-  end
-  love.graphics.setColor(200,200,200,255)
-
-  view_height = love.graphics.getHeight() * 0.9
-
   for i, player in ipairs(game.players) do
     player:draw(dt)
   end
