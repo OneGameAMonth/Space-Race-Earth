@@ -3,68 +3,25 @@
 
 -- To draw the spaceship try http://pixieengine.com
 
-
--- Here we keep any data from the game like height, speed, gravity
-game_defaults = {
-  stopped = false,
-  startHeight = 200, -- same as hight but won't be changed by the game
-  height = 200,
-  boosting = false,
-  speed_vertical = 0,
-  max_speed_vertical = 2,
-  gravity = 0.2,
-  save_landing_speed = 0.2, -- for our win/lose condition we define a maximum speed that is save for landing
-  spaceship = nil,
-  spaceship_with_booster = nil,
-  time_elapsed = 0
-}
+require('lib/middleclass')
+require('spaceship')
+require('game')
 
 function love.load()
-  game = {} -- let's copy the defaults, lame excuse to use a for-loop ;-)
-  for k, v in pairs(game_defaults) do game[k] = v end
-
-  game.spaceship = love.graphics.newImage('spaceship.png')
-  -- http://pixieengine.com/sprites/34690-spaceship-with-booster
-  game.spaceship_with_booster = love.graphics.newImage('spaceship_with_booster.png')
-
+  game = Game()
 end
 
 -- update is run again and again, the variable dt tells you how much time elapsed since the last time
 function love.update(dt)
-  game.boosting = false -- always set false but if the key is set it will be set to true
   if game.stopped then
     if love.keyboard.isDown('r') then
-      love.load()
+      game = Game()
     end
-    return -- when we land and stop the game we can leave this function right away
+    return
+  else
+    game:update(dt)
   end
 
-  -- keep track of time
-  game.time_elapsed = game.time_elapsed + dt
-
-  -- Minimum interaction is if you hit space to boost your speed, we use dt to make it smooth
-  if love.keyboard.isDown(' ') then
-    game.speed_vertical = game.speed_vertical - dt
-    game.boosting = true
-  end
-
-  -- things have a maximum speed, and as log as we haven't reached that we can
-  -- use gravity and dt to fall faster.
-  if game.speed_vertical < game.max_speed_vertical then
-    -- Honestly, I don't know if that's the right formula
-    game.speed_vertical = game.speed_vertical + dt * game.gravity
-  end
-  -- we are falling, thus reduce the height
-  game.height = game.height - game.speed_vertical
-
-  if game.height <= 0 then
-    -- compare the last speed with the speed we consider save for landing
-    if game.speed_vertical > game.save_landing_speed then
-      game.crashed = true
-    end
-    game.height = 0
-    game.stopped = true
-  end
 end
 
 function love.draw()
@@ -103,14 +60,10 @@ function love.draw()
 
   view_height = love.graphics.getHeight() * 0.9
 
-  -- let's draw the space ship
-  local spaceship = game.spaceship
-  if game.boosting then
-    spaceship = game.spaceship_with_booster
+  for i, player in ipairs(game.players) do
+    player:draw(dt)
   end
-  love.graphics.draw(spaceship,
-    love.graphics.getWidth() / 2 - 16, -- center it in the middle, subtract half the image's width
-    view_height - 32 - (view_height * game.height / game.startHeight)) -- 32 is image height
+  
   -- let's draw the moon surface
 
   love.graphics.rectangle('fill',
